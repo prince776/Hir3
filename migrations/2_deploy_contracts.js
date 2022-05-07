@@ -1,5 +1,5 @@
-const DHire = artifacts.require("DHire");
+const DHire = artifacts.require('DHire')
 
-module.exports = function(deployer) {
-  deployer.deploy(DHire);
-};
+module.exports = function (deployer) {
+    deployer.deploy(DHire)
+}
