@@ -1,11 +1,22 @@
-function Navbar(props: any) {
+import { useNavigate } from "react-router-dom";
+import { User, Web3Data } from "../types"
+import Identicon from '@polkadot/react-identicon';
+import { Link } from "react-router-dom";
+
+interface NavbarProps {
+    user: User | null;
+    web3Data: Web3Data;
+};
+
+function Navbar(props: NavbarProps) {
+    const navigate = useNavigate();
     return (
         <div className="navbar-accent sticky-top">
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand navbar-light bg-light">
                 <div className="container">
-                    <a className="navbar-brand">
+                    <Link to='/' className="navbar-brand">
                         <h1>Hir3</h1>
-                    </a>
+                    </Link>
 
                     <button
                         className="navbar-toggler"
@@ -25,20 +36,28 @@ function Navbar(props: any) {
                     >
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0"></ul>
 
-                        <div className="d-flex align-items-center">
-                            <button
-                                type="button"
-                                className="btn btn-link px-3 me-2"
-                            >
-                                Login
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn-primary me-3"
-                            >
-                                Sign up
-                            </button>
-                        </div>
+                        {
+                            props.user ?
+                                <div>
+                                    <Identicon
+                                        value={props.user.account}
+                                        size={32}
+                                        theme={'polkadot'}
+                                    />
+                                    <div onClick={() => navigate('/profile')} className="btn btn-primary">{props.user.name}</div>
+                                </div>
+                                :
+                                <div className="d-flex align-items-center">
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary me-3"
+                                        data-toggle="modal" data-target="#modalLoginForm"
+                                        onClick={() => navigate('/signup')}
+                                    >
+                                        Sign up
+                                    </button>
+                                </div>
+                        }
                     </div>
                 </div>
             </nav>

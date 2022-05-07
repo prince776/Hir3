@@ -43,13 +43,21 @@ contract('DHire', ([deployer, author]) => {
             await dhire.registerUser('', '', { from: author }).should.be
                 .rejected
 
+            await dhire.getSelf({ from: author }).should.be.rejected;
+
+
             await dhire.registerUser(name1, bio1, { from: author }).should.not
                 .be.rejected
-            const user = await dhire.getUser(name1)
-            assert.equal(user['0'], name1)
-            assert.equal(user['1'], bio1)
-            assert.equal(user['2'].toNumber(), 0)
-
+            const user = await dhire.getUser(name1);
+            assert.equal(user['0'], name1);
+            assert.equal(user['1'], bio1);
+            assert.equal(user['2'].toNumber(), 0);
+            {
+                const user = await dhire.getSelf({ from: author });
+                assert.equal(user['0'], name1);
+                assert.equal(user['1'], bio1);
+                assert.equal(user['2'].toNumber(), 0);
+            }
             await dhire.registerUser(name1, bio1, { from: author }).should.be
                 .rejected
         })

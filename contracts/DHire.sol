@@ -40,6 +40,7 @@ contract DHire {
     uint id;
     string hash; // to ipfs document
     string authorName;
+    string authorBio;
   }
 
   mapping(address => User) private users;
@@ -64,6 +65,13 @@ contract DHire {
     nameToUser[_username] = msg.sender;
   }
 
+  function getSelf() public view returns(string memory, string memory, uint) {
+    require(msg.sender != address(0));
+    require(bytes(users[msg.sender].name).length > 0);
+
+    return (users[msg.sender].name, users[msg.sender].bio, users[msg.sender].resumeId);
+  }
+
   function getUser(string memory _username) public view returns(string memory, string memory, uint) {
     require(bytes(_username).length > 0);
     require(msg.sender != address(0));
@@ -84,7 +92,7 @@ contract DHire {
       users[msg.sender].resumeId = resumeCount;
     }
 
-    resumes[users[msg.sender].resumeId] = Resume(users[msg.sender].resumeId, _docHash, users[msg.sender].name);
+    resumes[users[msg.sender].resumeId] = Resume(users[msg.sender].resumeId, _docHash, users[msg.sender].name, users[msg.sender].bio);
   }
 
   function getMessages() public view returns(string[] memory) {
