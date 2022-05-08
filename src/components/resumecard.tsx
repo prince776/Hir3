@@ -29,6 +29,7 @@ function Resumecard(props: ResumecardProps) {
         }
         const task = async () => {
             if (!props.user) return;
+            // console.log("calling");
             const resume = await props.web3Data.contract.resumes(props.user.resumeId);
             setResume({
                 id: resume[0].toNumber(),
@@ -41,7 +42,7 @@ function Resumecard(props: ResumecardProps) {
         task();
     }, [props]);
 
-    if (!props.user) return (<div />);
+    if (!props.user && !props.resume) return (<div />);
     
     return (
         <div
