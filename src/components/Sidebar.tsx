@@ -10,12 +10,12 @@ const Sidebar = (props: SidebarProps) => {
 
     return (
         <div className="nav row">
-            <div className="p-2 h4 border-bottom">Your chats</div>
+            <div className="p-2 h4 border-bottom" >Your chats</div>
             {
                 props.chatUsers.length > 0 ?
                 props.chatUsers.map(chatUser => {
                     return (
-                        <div  key={chatUser} role="button" className={`border nav-item nav-link ${chatUser===props.activeName? 'active': ''}`} onClick={() => navigate(`/chat?user=${chatUser}`)}>{chatUser}</div>
+                        <div key={chatUser} role="button" className={`border nav-item nav-link ${chatUser===props.activeName? 'active': ''}`} onClick={() => navigate(`/chat?user=${chatUser}`)}>{chatUser}</div>
                     )
                 })
                 :

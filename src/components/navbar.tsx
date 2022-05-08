@@ -15,7 +15,8 @@ function Navbar(props: NavbarProps) {
             <nav className="navbar navbar-expand navbar-light bg-light">
                 <div className="container">
                     <Link to='/' className="navbar-brand">
-                        <h1>Hir3</h1>
+                        {/* <h1>Hir3</h1> */}
+                        <img src="logo.png" width={150}/>
                     </Link>
 
                     <button

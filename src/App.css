@@ -77,11 +77,16 @@ body {
     overflow: hidden;
 }
 
+.nav-item{
+    background-color: #eee;
+    color: #222;
+}
+
 .nav-item:hover{
-    background-color: #ddd;
+    background-color: #bbb;
     color: #222;
 }
 .active {
-    background-color: #ddd;
+    background-color: #bbb;
     color: #222;
 }
