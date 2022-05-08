@@ -19,3 +19,10 @@ export interface Resume {
     author: string;
     authorBio: string;
 }
+
+export interface Message {
+    sender: string;
+    receiver: string;
+    timestamp: number;
+    message: string;
+}

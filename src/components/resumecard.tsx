@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Resume, User, Web3Data } from '../types';
 import { getIPFSUrl } from '../utils';
 const reactPdf = require('react-pdf/dist/esm/entry.webpack5')
@@ -15,6 +16,7 @@ function Resumecard(props: ResumecardProps) {
     const [numPages, setNumPages] = useState(null)
     const [pageNumber, setPageNumber] = useState(1)
     const [resume, setResume] = useState<Resume | null>(null);
+    const navigate = useNavigate();
 
     function onDocumentLoadSuccess({ numPages }: { numPages: any }) {
         setNumPages(numPages)
@@ -42,14 +44,15 @@ function Resumecard(props: ResumecardProps) {
     if (!props.user) return (<div />);
     
     return (
-        <a
-            className="card m-3 hover-zoom ripple shadow-1-strong"
-            href={getIPFSUrl(resume?.docHash)}
-            target="_blank" rel="noreferrer"
+        <div
+            className="card m-3 hover-zoom shadow-1-strong"
         >
             <div className="row g-0">
                 <div className="col-md-4">
-                    <div className="img-fluid rounded-start thumbnail-wrapper">
+                    <a 
+                        href={getIPFSUrl(resume?.docHash)}
+                        target="_blank" rel="noreferrer" >
+                    <div className="border img-fluid rounded-start thumbnail-wrapper" role="button" >
                         <Document
                             file={{
                                 url: getIPFSUrl(resume?.docHash)
@@ -64,15 +67,17 @@ function Resumecard(props: ResumecardProps) {
                             />
                         </Document>
                     </div>
+                    </a>
                 </div>
                 <div className="col-md-8">
                     <div className="card-body">
-                        <h5 className="card-title">{resume?.author}</h5>
-                        <p className="card-text text-muted">{resume?.authorBio}</p>
+                        <h5 className="card-title" role="button" onClick={() => navigate(`/profile?handle=${resume?.author || props.user?.name}`)}>{resume?.author || props.user?.name}</h5>
+                        <p className="card-text text-muted">{resume?.authorBio || props.user?.bio}</p>
+                        <div className='btn btn-secondary' role='button' onClick={() => navigate(`/chat?user=${resume?.author}`)}>Chat</div>
                     </div>
                 </div>
             </div>
-        </a>
+        </div>
     )
 }
 

@@ -33,7 +33,7 @@ contract('DHire', ([deployer, author]) => {
     describe('dhire', async () => {
         const docHash = 'QmV8cfu6n4NT5xRr2AHdKxFMTZEJrA44qgrBCr739BN9Wb'
         const name1 = 'name1'
-        const bio1 = 'bio1'
+        const bio1 = 'bio1', bio2 = 'bio2';
         const message1 = 'message1',
             message2 = 'message2'
 
@@ -53,9 +53,10 @@ contract('DHire', ([deployer, author]) => {
             assert.equal(user['1'], bio1);
             assert.equal(user['2'].toNumber(), 0);
             {
+                await dhire.updateBio(bio2, { from: author }).should.not.be.rejected;
                 const user = await dhire.getSelf({ from: author });
                 assert.equal(user['0'], name1);
-                assert.equal(user['1'], bio1);
+                assert.equal(user['1'], bio2);
                 assert.equal(user['2'].toNumber(), 0);
             }
             await dhire.registerUser(name1, bio1, { from: author }).should.be
@@ -93,8 +94,11 @@ contract('DHire', ([deployer, author]) => {
             assert.equal(m1[0], name1)
             assert.equal(m2[0], name1)
 
-            assert.equal(m1[2], message1)
-            assert.equal(m2[2], message2)
+            assert.equal(m1[1], name1)
+            assert.equal(m2[1], name1)
+
+            assert.equal(m1[3], message1)
+            assert.equal(m2[3], message2)
         })
     })
 })

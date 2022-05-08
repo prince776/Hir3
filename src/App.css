@@ -76,3 +76,12 @@ body {
     position: relative;
     overflow: hidden;
 }
+
+.nav-item:hover{
+    background-color: #ddd;
+    color: #222;
+}
+.active {
+    background-color: #ddd;
+    color: #222;
+}

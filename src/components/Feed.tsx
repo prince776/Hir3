@@ -1,14 +1,15 @@
 import Resumecard from '../components/resumecard'
 import Listingcard from '../components/listingcard'
 
-import sample_feed from '../sample_data/sample_feed.json'
 import { Resume, User, Web3Data } from '../types';
 import { useEffect, useState } from 'react';
+import Sidebar from './Sidebar';
 
 interface FeedProps {
     user: User | null;
     web3Data: Web3Data;
     updateUser: () => void;
+    chatUsers: string[];
 };
 
 const Feed = (props: FeedProps) => {
@@ -30,9 +31,8 @@ const Feed = (props: FeedProps) => {
                     authorBio: resume[3],
                 });
 
-                console.log(resume);
             }
-            console.log(resumes);
+            // console.log(resumes);
             setResumes(resumes);
         };
         
@@ -40,21 +40,9 @@ const Feed = (props: FeedProps) => {
     }, []);
 
     return (
-        <div className="row">
+        <div className="row mt-2">
             <div className="col-md-3">
-            <nav className="navbar navbar-light navbar-expand-sm px-0 flex-row flex-nowrap">
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarWEX" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                 <div className="navbar-collapse collapse" id="navbarWEX">
-                    <div className="nav flex-sm-column flex-row">
-                        <a className="nav-item nav-link active" href="#">Home</a>
-                        <a href="#" className="nav-item nav-link">Link</a>
-                        <a href="#" className="nav-item nav-link">Link</a>
-                        <a href="#" className="nav-item nav-link">Link</a>
-                    </div>
-                </div>
-            </nav>
+                <Sidebar chatUsers={props.chatUsers} />
             </div>
             <div className="col-md-6">
                 {resumes.map((resume) => (

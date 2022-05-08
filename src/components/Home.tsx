@@ -7,10 +7,11 @@ import Navbar from '../components/navbar'
 import DHire from '../abis/DHire.json';
 
 import { ethers } from "ethers";
-import { getBalance } from '../utils'
-import { User, Web3Data } from '../types'
+import { getBalance, parseMessageString } from '../utils'
+import { Message, User, Web3Data } from '../types'
 import Feed from './Feed';
 import Profile from './Profile';
+import Chatroom from './Chatroom';
 
 const ethereum = window.ethereum!;
 
@@ -41,13 +42,16 @@ function Home() {
     const [balance, setBalance] = useState<string>('0');
 
     const [user, setUser] = useState<User | null>(null);
-
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [chatUsers, setChatUsers] = useState<string[]>([]);
+    
     useEffect(() => {
         window.ethereum.request({ method: 'eth_requestAccounts' }).then((res: string[]) => {
             setAccount(res[0]);
             loadUser(res[0]).then(async user => {
                 setUser(user);
             });
+            // contract.sendMessage('cmc', 'yo cmc your yt sucks');
         });
         getBalance(provider, account).then(balance => {
             setBalance(balance);
@@ -75,16 +79,32 @@ function Home() {
     }
     
     useEffect(() => {
-        // console.log(user);
+        console.log(user);
+        const task = async () => {
+            if (!user) return;
+            const messageStrings = await contract.getMessages();
+            console.log(messageStrings);
+            const messages: Message[] = [];
+            const chatUsers = new Set<string>();
+            for (const messageString of messageStrings) {
+                if (messageString.split(':').length <= 3) continue;
+                messages.push(parseMessageString(messageString));
+                chatUsers.add(messages[messages.length - 1].sender);
+            }
+            setMessages(messages);
+            setChatUsers(Array.from(chatUsers.values()));
+        };
+        task();
     }, [user])
 
     return (
         <div className="App">
             <Navbar user={user} web3Data={web3Data}/>
             <Routes>
-                <Route path='/' element={<Feed user={user} web3Data={web3Data} updateUser={updateUser}/>} />
+                <Route path='/' element={<Feed user={user} web3Data={web3Data} updateUser={updateUser} chatUsers={chatUsers}/>} />
                 <Route path='/signup' element={<Signup user={user} web3Data={web3Data}/>} />
                 <Route path='/profile' element={<Profile user={user} web3Data={web3Data} updateUser={updateUser} />} />
+                <Route path='/chat' element={<Chatroom user={user} web3Data={web3Data} updateUser={updateUser} chatUsers={chatUsers} messages={messages}/>} />
             </Routes>
         </div>
     )

@@ -95,6 +95,18 @@ contract DHire {
     resumes[users[msg.sender].resumeId] = Resume(users[msg.sender].resumeId, _docHash, users[msg.sender].name, users[msg.sender].bio);
   }
 
+  function updateBio(string memory _bio) public {
+    require(bytes(_bio).length > 0);
+    require(msg.sender != address(0));
+
+    require(bytes(users[msg.sender].name).length > 0);
+
+    users[msg.sender].bio = _bio;
+    if (users[msg.sender].resumeId > 0) { // update bio in resume as well
+      resumes[users[msg.sender].resumeId].authorBio = _bio;
+    }
+  }
+
   function getMessages() public view returns(string[] memory) {
     require(msg.sender != address(0));
     require(bytes(users[msg.sender].name).length > 0);
@@ -116,12 +128,17 @@ contract DHire {
     string memory delimeter = ":";
     string memory timestamp = toString(block.timestamp);
     string memory message = senderName.concat(delimeter);
+    message = message.concat(_rcvName);
+    message = message.concat(delimeter);
     message = message.concat(timestamp);
     message = message.concat(delimeter);
     message = message.concat(_message);
     
     // string memory message = string(concat(bytes(senderName), ":", bytes(_timestamp), ":", bytes(_message)));
     messages[rcvAddress].push(message);
+    if (rcvAddress != msg.sender) {
+        messages[msg.sender].push(message);
+    }
   }
 
   // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Strings.sol#L15-L35

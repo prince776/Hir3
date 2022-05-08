@@ -1,10 +1,8 @@
-import { create, CID, IPFSHTTPClient } from "ipfs-http-client";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import Swal from 'sweetalert2';
 import { User, Web3Data } from "../types";
 import { loadUser } from "../utils";
-import Listingcard from "./listingcard";
+import EditProfile from "./EditProfile";
 import Resumecard from "./resumecard";
 
 interface ProfileProps {
@@ -13,15 +11,12 @@ interface ProfileProps {
     updateUser: () => void;
 };
 
-const client = create({
-    url: 'https://ipfs.infura.io:5001/api/v0'
-});
-
 const Profile = (props: ProfileProps) => {
 
     const [handle, setHandle] = useState<string>('');
     const [searchParams, setSearchParams] = useSearchParams();
     const [thisUser, setThisUser] = useState<User | null>(null);
+    const [newBio, setNewBio] = useState<string>('');
 
     useEffect(() => {
         let queryHandle = searchParams.get('handle');
@@ -44,6 +39,9 @@ const Profile = (props: ProfileProps) => {
     }, [props.user]);
 
     // console.log("this user:", thisUser);
+    // console.log("props user:", props.user);
+
+
     return (
         <div>
             <br />
@@ -52,21 +50,12 @@ const Profile = (props: ProfileProps) => {
                     <Resumecard user={thisUser} web3Data={props.web3Data} height={350} />
                 </div>
             </div>
-            {/* {
-                thisUser?.name === props.user?.name ?
-                    (
-                        <div className="text-center row justify-content-center border border-light p-5">
-                            <div className="col-12 col-md-6 col-lg-4">
-                                <p className="h4 mb-4">Edit Your Profile</p>
-                                <textarea className="form-control mb-4" placeholder="Enter your bio" value={thisUser?.bio} onChange={(e) => setThisUser({ ...thisUser, bio: e.target.value})} />
-                                <br />
-                                <button className="btn btn-info btn-block my-4" onClick={() => onSignup()}>Sign up</button>
-                            </div>
-                        </div>
-                    )
+            {
+                props.user && thisUser && thisUser.name === props.user.name ?
+                    <EditProfile user={props.user} web3Data={props.web3Data} updateUser={props.updateUser}/>
                     :
                     <div />
-            } */}
+            }
         </div>
     )
 }
