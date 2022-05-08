@@ -49,7 +49,7 @@ function Resumecard(props: ResumecardProps) {
             className="card m-3 hover-zoom shadow-1-strong"
         >
             <div className="row g-0">
-                <div className="col-md-4">
+                <div className="col-md-3">
                     <a 
                         href={getIPFSUrl(resume?.docHash)}
                         target="_blank" rel="noreferrer" >
@@ -70,7 +70,7 @@ function Resumecard(props: ResumecardProps) {
                     </div>
                     </a>
                 </div>
-                <div className="col-md-8">
+                <div className="col-md-9">
                     <div className="card-body">
                         <h5 className="card-title" role="button" onClick={() => navigate(`/profile?handle=${resume?.author || props.user?.name}`)}>{resume?.author || props.user?.name}</h5>
                         <p className="card-text text-muted">{resume?.authorBio || props.user?.bio}</p>
